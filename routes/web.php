@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('', [HomeController::class, 'index'])->name('index');
+Route::get('cv', [HomeController::class, 'mycv'])->name('cv');
 
 Route::prefix('system')->name('system.')->group(function() {
     Route::get('login', [AuthController::class, 'form'])->name('login.form');

@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware("guest")->except('logout');
+        $this->middleware("guest:web")->except('logout');
+    }
+
     public function form(Request $req)
     {
         return view('system/auth/index');

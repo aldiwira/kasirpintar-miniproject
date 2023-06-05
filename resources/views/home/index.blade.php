@@ -36,7 +36,7 @@
                 <span>Klik untuk mengarahkan anda ke hasil pengerjaan</span>
                 <div class="d-grid gap-2 mt-5">
                     <a class="btn btn-dark" href="{{ route('system.login.form') }}" role="button">Login</a>
-                    <a class="btn btn-outline-dark" href="" role="button">CV Saya</a>
+                    <a class="btn btn-outline-dark" href="{{ route('cv') }}" role="button">CV Saya</a>
                 </div>
             </div>
         </div>
