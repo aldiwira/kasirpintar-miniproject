@@ -22,11 +22,13 @@ class PermissionUsersSeeder extends Seeder
         Permission::create(['name'=> 'create items']);
         Permission::create(['name'=> 'edit items']);
         Permission::create(['name'=> 'delete items']);
+        Permission::create(['name'=> 'see logs']);
 
         $adminrole = Role::create(['name' => 'admin']);
         $adminrole->givePermissionTo('create items');
         $adminrole->givePermissionTo('edit items');
         $adminrole->givePermissionTo('delete items');
+        $adminrole->givePermissionTo('see logs');
 
         $staffrole = Role::create(['name' => 'staff']);
         $staffrole->givePermissionTo('create items');

@@ -15,6 +15,7 @@ class ItemsController extends Controller
         $this->middleware('permission:create items', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit items', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete items', ['only' => ['destroy']]);
+        $this->middleware('auth', ['except' => ['index','show']]);
     }
     /**
      * Display a listing of the resource.

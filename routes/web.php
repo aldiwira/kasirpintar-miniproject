@@ -24,10 +24,7 @@ Route::prefix('system')->name('system.')->group(function() {
     Route::post('login', [AuthController::class, 'submit'])->name('login.submit');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::resource('barang', ItemsController::class)->only(['index', 'show']);
-    Route::get('dashboard', [WebHomeController::class, 'index'])->name('dashboard');
 
-    Route::middleware(['auth'])->group(function() {
-        Route::resource('barang', ItemsController::class)->except(['index', 'show']);
-    });
+    Route::resource('barang', ItemsController::class);
+    Route::get('dashboard', [WebHomeController::class, 'index'])->name('dashboard');
 });
