@@ -22,11 +22,12 @@ Route::get('', [HomeController::class, 'index'])->name('index');
 Route::prefix('system')->name('system.')->group(function() {
     Route::get('login', [AuthController::class, 'form'])->name('login.form');
     Route::post('login', [AuthController::class, 'submit'])->name('login.submit');
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
+    Route::resource('barang', ItemsController::class)->only(['index', 'show']);
     Route::get('dashboard', [WebHomeController::class, 'index'])->name('dashboard');
 
     Route::middleware(['auth'])->group(function() {
-        Route::resource('barang', ItemsController::class);
+        Route::resource('barang', ItemsController::class)->except(['index', 'show']);
     });
 });

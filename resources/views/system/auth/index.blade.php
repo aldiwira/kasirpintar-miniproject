@@ -56,6 +56,7 @@
                     </div>
                     <div class="d-grid gap-2 mt-3">
                         <button type="submit" class="btn btn-dark">Login</button>
+                        <a role="button" href="{{ route('system.dashboard') }}" class="btn btn-outline-dark">Login as Guest</a>
                     </div>
 
                 </div>

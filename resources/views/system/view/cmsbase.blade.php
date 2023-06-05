@@ -49,9 +49,13 @@
             <div class="d-flex">
                 <div class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        @if (auth()->user())
                         @auth
                         {{auth()->user()->name}} ({{auth()->user()->getRoleNames()[0]}})
                         @endauth
+                        @else
+                        Guest (Guest)
+                        @endif
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="{{ route('system.logout') }}">Logout</a></li>

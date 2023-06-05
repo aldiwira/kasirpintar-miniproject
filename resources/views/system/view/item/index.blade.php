@@ -5,7 +5,9 @@
 
     <div class="mt-4">
         <div class="mb-3">
-            <a role="button" href="{{ route('system.barang.create') }}" class="btn btn-success">Tambah Barang</a>
+            @can('create items')
+                <a role="button" href="{{ route('system.barang.create') }}" class="btn btn-success">Tambah Barang</a>
+            @endcan
         </div>
         <table id="tables" class="table table-striped" style="width:100%">
             <thead class="table-dark">
@@ -30,8 +32,12 @@
 
                             <ul class="dropdown-menu">
                               <li><a class="dropdown-item" href="{{ route('system.barang.show', $item) }}">Lihat</a></li>
+                              @can('edit items')
                               <li><a class="dropdown-item" href="{{ route('system.barang.edit', $item) }}">Edit</a></li>
+                              @endcan
+                              @can('delete items')
                               <li><button class="dropdown-item" onclick="deleteItem({{$item->id}})" data-bs-toggle="modal" data-bs-target="#modalDelete">Delete</button></li>
+                              @endcan
                             </ul>
                         </div>
                     </td>
