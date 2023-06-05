@@ -27,4 +27,5 @@ Route::prefix('system')->name('system.')->group(function() {
 
     Route::resource('barang', ItemsController::class);
     Route::get('dashboard', [WebHomeController::class, 'index'])->name('dashboard');
+    Route::get('barang/{id}/logs', [ItemsController::class, 'logs'])->name("barang.logs");
 });

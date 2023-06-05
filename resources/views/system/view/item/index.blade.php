@@ -38,6 +38,9 @@
                               @can('delete items')
                               <li><button class="dropdown-item" onclick="deleteItem({{$item->id}})" data-bs-toggle="modal" data-bs-target="#modalDelete">Delete</button></li>
                               @endcan
+                              @can('see logs')
+                              <li><a href="{{ route('system.barang.logs', $item) }}" class="dropdown-item" >Log Barang</a></li>
+                              @endcan
                             </ul>
                         </div>
                     </td>

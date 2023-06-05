@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Helper\ESHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ItemsFormRequest;
 use App\Models\Item;
@@ -15,6 +16,7 @@ class ItemsController extends Controller
         $this->middleware('permission:create items', ['only' => ['create', 'store']]);
         $this->middleware('permission:edit items', ['only' => ['edit', 'update']]);
         $this->middleware('permission:delete items', ['only' => ['destroy']]);
+        $this->middleware('permission:see logs', ['only' => ['logs']]);
         $this->middleware('auth', ['except' => ['index','show']]);
     }
     /**
@@ -49,8 +51,25 @@ class ItemsController extends Controller
     public function store(ItemsFormRequest $req)
     {
         $req->validated();
-        Item::create($req->only(['name', 'description']));
-        return $this->setToast('success', 'Berhasil Mengubah Barang', 'system.barang.index');
+        try {
+            $item = Item::create($req->only(['name', 'description']));
+            (new ESHandler())->store([
+                "id" => $item->id,
+                'index' => "items-index",
+                'body' => [
+                    'id' => $item->id,
+                    'item' => $req->get('name'),
+                    'status' => "Created",
+                    'user' => auth()->user()->name,
+                    'updated_at' => $item->updated_at
+                ]
+            ]);
+            return $this->setToast('success', 'Berhasil Mengubah Barang', 'system.barang.index');
+        } catch (\Throwable $th) {
+            dd($th);
+            return $this->setToast('error', 'Error', 'system.barang.index');
+        }
+
     }
 
     /**
@@ -102,8 +121,18 @@ class ItemsController extends Controller
         if(!$item){
             return $this->setToast('error', 'Barang tidak ditemukan', 'system.barang.index');
         }
-
         $item->update($request->only(['name', 'description']));
+        (new ESHandler())->store([
+            "id" => $item->id,
+            'index' => "items-index",
+            'body' => [
+                'id' => $item->id,
+                'item' => $request->get('name'),
+                'status' => "Edited",
+                'user' => auth()->user()->name,
+                'updated_at' => $item->updated_at
+            ]
+        ]);
         return $this->setToast('success', 'Berhasil Mengubah Barang', 'system.barang.index');
     }
 
@@ -130,5 +159,27 @@ class ItemsController extends Controller
             'messageToast' => $message,
         );
         return redirect()->route($routename)->with($toast);
+    }
+
+    public function logs($id)
+    {
+        $item = Item::whereId($id)->first();
+        if(!$item){
+            return $this->setToast('error', 'Barang tidak ditemukan', 'system.barang.index');
+        }
+
+        $data = (new ESHandler())->get('items-index', [
+            'query' => [
+                'multi_match' => [
+                    'query' => $item->id,
+                    'fields' => [
+                        'id'
+                    ]
+                ]
+            ]
+        ]);
+        return view('system/view/item/logs', [
+            'items' => $data
+        ]);
     }
 }
